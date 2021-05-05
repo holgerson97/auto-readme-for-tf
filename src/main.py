@@ -1,4 +1,5 @@
 import argparse
+import re
 
 def getVariablesFile():
     tfVarsFile = open(args.path + '/variables.tf', 'r')
@@ -7,13 +8,27 @@ def getVariablesFile():
 
     for line in tfVarsLines:
         if 'variable' in line:
-            pass
+            varName = re.findall('".+?"', line)[0]
+            print(varName)
+           
+        if 'description' in line:
+            varDescription = re.findall('\=(.*)', line)[0]
+            print(varDescription)
 
+        if 'type' in line:
+            varType = re.findall('\=(.*)', line)[0]
+            print(varType)
 
+        if 'default' in line:
+            varDefault = re.findall('\=(.*)', line)[0]
+            print(varDefault)
 
+        if 'sensitive' in line:
+            varSensitive = re.findall('\=(.*)', line)[0]
+            print(varSensitive)
 
 def main():
-    pass
+    getVariablesFile()
 
 
 if __name__ == "__main__":
