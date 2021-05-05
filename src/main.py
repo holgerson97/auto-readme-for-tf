@@ -1,31 +1,51 @@
 import argparse
 import re
+from pprint import pprint
 
 def getVariablesFile():
     tfVarsFile = open(args.path + '/variables.tf', 'r')
 
     tfVarsLines = tfVarsFile.readlines()
 
-    for line in tfVarsLines:
+    varStruc = {}
+
+    for i in range(0, len(tfVarsLines)):
+        line = tfVarsLines[i]
+
+        if line == "\n":
+            continue
+
         if 'variable' in line:
-            varName = re.findall('".+?"', line)[0]
-            print(varName)
+            varName = (re.findall('".+?"', line)[0]).replace('"', "")
+            varStruc.update({"name" : varName})
            
         if 'description' in line:
-            varDescription = re.findall('\=(.*)', line)[0]
-            print(varDescription)
+            varDescription = ((re.findall('\=(.*)', line)[0]).replace(" ", "")).replace('"', "")
+            varStruc.update({"description" : varDescription})
 
         if 'type' in line:
-            varType = re.findall('\=(.*)', line)[0]
-            print(varType)
+            varType = (re.findall('\=(.*)', line)[0]).replace(" ", "")
+            varStruc.update({"type" : varType})
 
         if 'default' in line:
             varDefault = re.findall('\=(.*)', line)[0]
-            print(varDefault)
+
+            if '{' in varDefault:
+                varDefault = {}
+                while True:
+                    i = i + 1
+                    value = tfVarsLines[i]
+                    if '}' in value:
+                        break
+                    varDefault.update({(re.findall('[^=]*', value)[0]).replace(" ","") : (re.findall('\=(.*)', value)[0]).replace(" ","")})
+            
+            varStruc.update({"default" : varDefault})    
 
         if 'sensitive' in line:
-            varSensitive = re.findall('\=(.*)', line)[0]
-            print(varSensitive)
+            varSensitive = (re.findall('\=(.*)', line)[0]).replace(" ", "")
+            varStruc.update({"sensitive" : varSensitive})    
+
+    pprint(varStruc)
 
 def main():
     getVariablesFile()
