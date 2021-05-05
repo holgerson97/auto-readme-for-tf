@@ -1,0 +1,17 @@
+# {{ moduleName }}
+# Variables
+| Variable | Type | Default | Description |
+| :------- | :--: | :------ | :---------- |
+
+{% macro variable(name, type, default, description) -%}
+| `"{{ name }}"` | "{{type}}" | "{{default}}" | "{{description}}" | 
+{%- endmacro %}
+
+# Outputs
+| Output | Description |
+| :----- | :---------- |
+
+{% macro output(name, description) -%}
+| `"{{ name }}"` | "{{description}}" |
+{%- endmacro %}
+
