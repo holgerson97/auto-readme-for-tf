@@ -12,6 +12,8 @@ def getVariablesFile():
     for i in range(0, len(tfVarsLines)):
         line = tfVarsLines[i]
 
+        print(line)
+
         if line == "\n":
             continue
 
