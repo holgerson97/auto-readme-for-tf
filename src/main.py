@@ -1,58 +1,87 @@
 import argparse
-import re
 import subprocess
+import os
+from re import match
+
+import processVarAndOut
+
 from pprint import pprint
 
-def getVariablesFile():
-    tfVarsFile = open(args.path + '/variables.tf', 'r')
+def getBlock(tfFile, struc):
 
-    tfVarsLines = tfVarsFile.readlines()
+    tfLines = (open(args.path + '/' + tfFile, 'r')).readlines()
 
-    varStruc = {}
+    for i in range(0, len(tfLines)):
+        line = tfLines[i]
 
-    for i in range(0, len(tfVarsLines)):
-        line = tfVarsLines[i]
+        block = []
 
-        print(line)
+        if match('^variable\s\".+\"\s{', line):
 
-        if line == "\n":
-            continue
+            if line[-1] == '}':
+                block + line
+                continue
 
-        if 'variable' in line:
-            varName = (re.findall('".+?"', line)[0]).replace('"', "")
-            varStruc.update({"name" : varName})
-           
-        if 'description' in line:
-            varDescription = ((re.findall('\=(.*)', line)[0]).replace(" ", "")).replace('"', "")
-            varStruc.update({"description" : varDescription})
+            count = -1
 
-        if 'type' in line:
-            varType = (re.findall('\=(.*)', line)[0]).replace(" ", "")
-            varStruc.update({"type" : varType})
+            while(True):
+                count +=1
+                block.append(tfLines[i + count])
 
-        if 'default' in line:
-            varDefault = re.findall('\=(.*)', line)[0]
+                if tfLines[i + count][0] == '}':
+                    break
 
-            if '{' in varDefault:
-                varDefault = {}
-                while True:
-                    i = i + 1
-                    value = tfVarsLines[i]
-                    if '}' in value:
-                        break
-                    varDefault.update({(re.findall('[^=]*', value)[0]).replace(" ","") : (re.findall('\=(.*)', value)[0]).replace(" ","")})
+            struc['variables'].append(block)
+          
+
+
+        if match('^output\s\".+\"\s{', line):
             
-            varStruc.update({"default" : varDefault})    
+            if line[-1] == '}':
+                block + line
+                continue
 
-        if 'sensitive' in line:
-            varSensitive = (re.findall('\=(.*)', line)[0]).replace(" ", "")
-            varStruc.update({"sensitive" : varSensitive})    
+            count = -1
 
-    pprint(varStruc)
+            while(True):
+                count +=1
+                block.append(tfLines[i + count])
+
+                if tfLines[i + count][0] == '}':
+                    break
+            
+            struc['outputs'].append(block)
+
+def lookupFiles():
+    '''
+    Returns list of Terraform files in given script param "args.path".  
+    '''
+
+    tfFiles = []
+
+    for file in os.listdir(args.path):
+        if file.endswith(".tf"):
+            tfFiles.append(file)
+
+    return tfFiles
 
 def main():
 
     subprocess.call("./preflight.sh" + ' -p ' + args.path, shell=True)
+
+    struc = { 'variables' : [], 'outputs' : [] }
+
+    # Get all variables and outputs defined in Terraform conifguration. Save them to strc dict.
+    for file in lookupFiles():
+        getBlock(file, struc)
+
+    # Build an array of maps that contain infomration about variables.
+    resultVars = []
+
+    for tfVars in struc['variables']:
+        resultVars.append(processVarAndOut.getVarsFromBlock(tfVars))
+
+    pprint(resultVars)
 
 if __name__ == "__main__":
 
@@ -61,6 +90,7 @@ if __name__ == "__main__":
     parser.add_argument('--path', type=str, default='./module',
                         help='Specify path to your Terraform module directory. Defaults to "./module".')
 
+    global args
     args = parser.parse_args()
 
     main()
