@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 # Editor files
-/.vscode
+.vscode
 
 # Testing module
 /module

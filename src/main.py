@@ -1,5 +1,6 @@
 import argparse
 import re
+import subprocess
 from pprint import pprint
 
 def getVariablesFile():
@@ -48,8 +49,8 @@ def getVariablesFile():
     pprint(varStruc)
 
 def main():
-    getVariablesFile()
 
+    subprocess.call("./preflight.sh" + ' -p ' + args.path, shell=True)
 
 if __name__ == "__main__":
 
