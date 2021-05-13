@@ -1,32 +1,37 @@
 from re import match
 from re import findall
 
-def getVarsFromBlock(rawVar):
+def getVarsFromBlock(rawData):
 
-    mapVars = {}
+    dictValue = {}
 
-    for line in rawVar:
+    for line in rawData:
 
         # Do nothing if empty line
         if line == '\n':
             continue
 
-        # Check if start variable definition and get variable name
         if match('^variable\s+\".+\"\s{', line):
-            mapVars['name'] = findall('^variable\\s"(.+)\"\s{', line)[0]
+            dictValue['name'] = findall('^variable\\s"(.+)\"\s{', line)[0]
 
         if match('\s+description\s+', line):
-            mapVars['description'] = findall('description\s+\=\s+\"(.+)\"', line)[0]
+            dictValue['description'] = findall('description\s+\=\s+\"(.+)\"', line)[0]
 
         if match('\s+type\s+', line):
-            mapVars['type'] = findall('type\s+\=\s+(\w*)', line)[0]
+            dictValue['type'] = findall('type\s+\=\s+(\w*)', line)[0]
 
         if match('\s+default\s+', line):
-            mapVars['default'] = findall('\s+default\s+\=\s+(.*)', line)[0]
+            dictValue['default'] = findall('\s+default\s+\=\s+(.+)', line)[0]
 
         if match('\s+sensitive\s+', line):
-            mapVars['sensitive'] = findall('sensitive\s+\=\s+(.+)', line)[0]
+            dictValue['sensitive'] = findall('sensitive\s+\=\s+(.+)', line)[0]
 
-    return mapVars
+        if match('^output\s+\".+\"\s{', line):
+            dictValue['name'] = findall('^output\\s"(.+)\"\s{', line)[0]
+
+        if match('\s+value\s+', line):
+            dictValue['value'] = findall('\s+value\s+=\s+(.+)', line)[0]
+
+    return dictValue
 
     #TODO add support for objects, maps

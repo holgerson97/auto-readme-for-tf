@@ -75,13 +75,18 @@ def main():
     for file in lookupFiles():
         getBlock(file, struc)
 
-    # Build an array of maps that contain infomration about variables.
+    # Build an array of maps that contain information about variables.
     resultVars = []
-
     for tfVars in struc['variables']:
         resultVars.append(processVarAndOut.getVarsFromBlock(tfVars))
 
+    # Build an array of maps that contain information about outputs.
+    resultOuts = []
+    for tfOuts in struc['outputs']:
+        resultOuts.append(processVarAndOut.getVarsFromBlock(tfOuts))
+
     pprint(resultVars)
+    pprint(resultOuts)
 
 if __name__ == "__main__":
 
