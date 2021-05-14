@@ -75,8 +75,6 @@ def main():
     for file in lookupFiles():
         getBlock(file, struc)
 
-    #pprint(struc)
-
     # Build an array of maps that contain information about variables.
     resultVars = []
     for tfVars in struc['variables']:
@@ -87,10 +85,9 @@ def main():
     for tfOuts in struc['outputs']:
         resultOuts.append(processVarAndOut.getVarsFromBlock(tfOuts))
 
-    renderReadMe.render(resultVars, resultOuts)
+    with open(args.path + '/README.md', 'w') as file:
+        file.write(renderReadMe.render(args.name, resultVars, resultOuts, args.contribute))
 
-    #pprint(resultVars)
-    # pprint(resultOuts)
 
 if __name__ == "__main__":
 
