@@ -26,4 +26,3 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 
 cd $TF_PATH
 terraform fmt -recursive || echo "Terraform not installed. Please ensure Terraform is installed before running this script."
-touch README.md
