@@ -1,5 +1,4 @@
-from re import match
-from re import findall
+from re import match, findall
 
 def getVarsFromBlock(rawData):
 
@@ -18,7 +17,7 @@ def getVarsFromBlock(rawData):
             dictValue['description'] = findall('description\s+\=\s+\"(.+)\"', line)[0]
 
         if match('\s+type\s+', line):
-            dictValue['type'] = findall('type\s+\=\s+(\w*)', line)[0]
+            dictValue['type'] = findall('type\s+\=\s+(.+)', line)[0]
 
         if match('\s+default\s+', line):
             dictValue['default'] = findall('\s+default\s+\=\s+(.+)', line)[0]
