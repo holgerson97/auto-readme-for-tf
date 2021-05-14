@@ -18,9 +18,8 @@ def getBlock(tfFile, struc):
         block = []
 
         if match('^variable\s\".+\"\s{', line):
-
-            if line[-1] == '}':
-                block + line
+            if line[-2] == '}':
+                block.append(line)
                 continue
 
             count = -1
@@ -76,6 +75,8 @@ def main():
     for file in lookupFiles():
         getBlock(file, struc)
 
+    #pprint(struc)
+
     # Build an array of maps that contain information about variables.
     resultVars = []
     for tfVars in struc['variables']:
@@ -86,9 +87,9 @@ def main():
     for tfOuts in struc['outputs']:
         resultOuts.append(processVarAndOut.getVarsFromBlock(tfOuts))
 
-    #renderReadMe.render(resultVars, resultOuts)
+    renderReadMe.render(resultVars, resultOuts)
 
-    pprint(resultVars)
+    #pprint(resultVars)
     # pprint(resultOuts)
 
 if __name__ == "__main__":
@@ -97,6 +98,12 @@ if __name__ == "__main__":
 
     parser.add_argument('--path', type=str, default='./module',
                         help='Specify path to your Terraform module directory. Defaults to "./module".')
+
+    parser.add_argument('--name', type=str, default='default_name',
+                        help='Specify the name of your Terraform module. Defaults to "default_name".')
+
+    parser.add_argument('--contribute', type=bool, default=True,
+                        help='Choose if you want to accept PRs. Defaults to True.')
 
     global args
     args = parser.parse_args()
