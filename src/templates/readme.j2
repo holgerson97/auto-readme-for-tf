@@ -9,6 +9,16 @@
 - [Outputs](#outputs)
 - [Contributing](#contributing)
 
+# Requirements
+| Software     |  Version  |
+| :--------    | :-------- |
+{%- macro buildRequirements(software, version) -%}
+| {{software}} | {{version}}|
+{%- endmacro -%}
+{% for items in requirements %}
+{{ buildRequirements(items.software, items.version) }}
+{%- endfor %}
+
 # Variables
 | Variable | Type | Default | Description | Sensitive |
 | :------- | :--: | :------ | :---------- | :-------- |
