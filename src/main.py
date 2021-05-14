@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 import os
-from re import match
+from re import match, findall
 
 import processVarAndOut
 import renderReadMe
@@ -33,12 +33,10 @@ def getBlock(tfFile, struc):
 
             struc['variables'].append(block)
           
-
-
         if match('^output\s\".+\"\s{', line):
             
             if line[-1] == '}':
-                block + line
+                block.append(line)
                 continue
 
             count = -1
@@ -52,6 +50,23 @@ def getBlock(tfFile, struc):
             
             struc['outputs'].append(block)
 
+        if match('^terraform\s+{', line):
+
+            if line[-1] == '}':
+                block.append(line)
+                continue
+
+            count = -1
+
+            while(True):
+                count +=1
+                block.append(tfLines[i + count])
+
+                if tfLines[i + count][0] == '}':
+                    break
+
+            struc['versions'].append(block)
+            
 def lookupFiles():
     '''
     Returns list of Terraform files in given script param "args.path".  
@@ -69,7 +84,7 @@ def main():
 
     subprocess.call("./preflight.sh" + ' -p ' + args.path, shell=True)
 
-    struc = { 'variables' : [], 'outputs' : [] }
+    struc = { 'variables' : [], 'outputs' : [], 'versions' : [] }
 
     # Get all variables and outputs defined in Terraform conifguration. Save them to strc dict.
     for file in lookupFiles():
