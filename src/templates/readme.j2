@@ -1,17 +1,20 @@
 # {{ moduleName }}
 # Variables
-| Variable | Type | Default | Description |
-| :------- | :--: | :------ | :---------- |
-
-{% macro variable(name, type, default, description) -%}
-| `"{{ name }}"` | "{{type}}" | "{{default}}" | "{{description}}" | 
-{%- endmacro %}
+| Variable | Type | Default | Description | Sensitive |
+| :------- | :--: | :------ | :---------- | :-------- |
+{%- macro buildVars(name, type, default, description, sensitive) -%}
+| `{{ name }}` | {{type}} | {{default}} | {{description}} | {{sensitive}} |
+{%- endmacro -%}
+{% for items in variables %}
+{{ buildVars(items.name, items.type, items.default, items.description, items.sensitive) }}
+{%- endfor %}
 
 # Outputs
 | Output | Description |
 | :----- | :---------- |
-
-{% macro output(name, description) -%}
-| `"{{ name }}"` | "{{description}}" |
-{%- endmacro %}
-
+{%- macro buildOuts(name, description) -%}
+| `{{ name }}` | {{description}} |
+{%- endmacro -%}
+{% for items in outputs %}
+{{ buildOuts(items.name, items.description) }}
+{%- endfor %}
