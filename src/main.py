@@ -4,6 +4,7 @@ import os
 from re import match
 
 import processVarAndOut
+import renderReadMe
 
 from pprint import pprint
 
@@ -85,8 +86,10 @@ def main():
     for tfOuts in struc['outputs']:
         resultOuts.append(processVarAndOut.getVarsFromBlock(tfOuts))
 
+    #renderReadMe.render(resultVars, resultOuts)
+
     pprint(resultVars)
-    pprint(resultOuts)
+    # pprint(resultOuts)
 
 if __name__ == "__main__":
 
