@@ -1,32 +1,19 @@
-# 
+# Auto README for Terraform
 
-&nbsp;
-# Variables
-| Variable | Type | Default | Description | Sensitive |
-| :------- | :--: | :------ | :---------- | :-------- |
-| `main-test-number` | number |  | Specify a number. | false |
-| `firewall_rules` | map(any) | { | Specify Firewallrules. | false |
-| `test1` | string | test1 | Specify test1. | false |
-| `name` | object({ |  |  |  |
+Tool to help you create templated READMEs that contain the actual information from your Terraform Module. Iterates through your module folder and pick up all information needed to make your README look good and provide helpful content.
 
-# Outputs
-| Output | Description |
-| :----- | :---------- |
-| `resource_group_name` |  |
-| `virtual_network_id` |  |
-| `virtual_network_name` |  |
-| `virtual_network_resource_group_name` |  |
-| `virtual_network_location` |  |
-| `virtual_network_address_space` |  |
-| `virtual_network_guid` |  |
-| `subnet_address_id` |  |
-| `subnet_address_name` |  |
-| `subnet_address_resource_group_name` |  |
-| `subnet_address_virtual_network_name` |  |
-| `subnet_address_prefix` |  |
-| `subnet_address_prefixes` |  |
-| `dns_servers_ip` |  |
+**NOTE:** Early stage of development, anyway it can fetch the most basic (and most time consuming) information from your module to create a README.
 
-&nbsp;
-## Contributing
-Feel free to create pull requests.
+## TODOs
+
+- Create better Makefile to make testing/development easier
+- Create Unit Tests
+- Create GitHub Action to run tests against Unit Tests
+- Add support for multi line variables
+- Add support for versions
+- Provide sample code for module in README
+- Choose between different README templates
+- Collect information about resources deployed and add to list
+- Create GitHub Action to use this tool
+- Create Actual README for repository
+- REFACTOR
