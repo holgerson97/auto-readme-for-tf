@@ -6,9 +6,21 @@ from re import match, findall
 import processVarAndOut
 import renderReadMe
 
-from pprint import pprint
-
 def getBlock(tfFile, struc):
+
+    def captureBlock():
+        if line[-2] == '}':
+            block.append(line)
+            return
+
+        count = -1
+
+        while(True):
+            count +=1
+            block.append(tfLines[i + count])
+
+            if tfLines[i + count][0] == '}':
+                break     
 
     tfLines = (open(args.path + '/' + tfFile, 'r')).readlines()
 
@@ -18,53 +30,15 @@ def getBlock(tfFile, struc):
         block = []
 
         if match('^variable\s\".+\"\s{', line):
-            if line[-2] == '}':
-                block.append(line)
-                continue
-
-            count = -1
-
-            while(True):
-                count +=1
-                block.append(tfLines[i + count])
-
-                if tfLines[i + count][0] == '}':
-                    break
-
+            captureBlock()
             struc['variables'].append(block)
           
         if match('^output\s\".+\"\s{', line):
-            
-            if line[-1] == '}':
-                block.append(line)
-                continue
-
-            count = -1
-
-            while(True):
-                count +=1
-                block.append(tfLines[i + count])
-
-                if tfLines[i + count][0] == '}':
-                    break
-            
+            captureBlock()
             struc['outputs'].append(block)
 
         if match('^terraform\s+{', line):
-
-            if line[-1] == '}':
-                block.append(line)
-                continue
-
-            count = -1
-
-            while(True):
-                count +=1
-                block.append(tfLines[i + count])
-
-                if tfLines[i + count][0] == '}':
-                    break
-
+            captureBlock()
             struc['versions'].append(block)
             
 def lookupFiles():
@@ -99,6 +73,10 @@ def main():
     resultOuts = []
     for tfOuts in struc['outputs']:
         resultOuts.append(processVarAndOut.getVarsFromBlock(tfOuts))
+    
+    resultVersions = []
+    for tfVersions in struc['versions']:
+        resultVersions.append(processVarAndOut.getVarsFromBlock(tfVersions))
 
     with open(args.path + '/README.md', 'w') as file:
         file.write(renderReadMe.render(args.name, resultVars, resultOuts, args.contribute))
