@@ -77,20 +77,20 @@ def captureTerraformObjects(path):
         try:
             tfType = findall('type\s+=\s+([\w\W]*\}\))|type\s+=\s+([\w()]+)', tfObject)[0]
             if tfType[0] == '': 
-                varObject.update({'type' : tfType[1]})
+                varObject.update({'type' : tfType[1].replace('\n', '')})
             elif tfType[1] == '':
-                varObject.update({'type' : tfType[0]})
+                varObject.update({'type' : tfType[0].replace('\n', '')})
         except (ValueError,IndexError):
             # Since types are optional we can pass IndexErrors
             pass
 
         # Get default from tfObject
         try:
-            tfDefault = findall('default\s+=\s+([\w\W]*\}\))|default\s+=\s+([\w()]+)', tfObject)[0]
+            tfDefault = findall('default\s+=\s({[\w\s=\"{}]*})|default\s+\=\s+\"*([\w()]*)\"*', tfObject)[0]
             if tfDefault[0] == '': 
-                varObject.update({'type' : tfDefault[1]})
+                varObject.update({'default' : tfDefault[1].replace('\n', '')})
             elif tfDefault[1] == '':
-                varObject.update({'type' : tfDefault[0]})
+                varObject.update({'default' : tfDefault[0].replace('\n', '')})
         except (ValueError,IndexError):
             # Since defaults are optional we can pass IndexErrors
             pass
@@ -214,4 +214,4 @@ def captureTerraformObjects(path):
     for i in lookupFiles():
         getTerraformObjects(i)
 
-    pprint.pprint(struc)
+    return struc
