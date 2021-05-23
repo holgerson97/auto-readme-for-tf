@@ -2,57 +2,11 @@ import argparse
 import subprocess
 import os
 from re import match, findall
+import pprint
 
 import processVarAndOut
 import renderReadMe
-
-def getBlock(tfFile, struc):
-
-    def captureBlock():
-        if line[-2] == '}':
-            block.append(line)
-            return
-
-        count = -1
-
-        while(True):
-            count +=1
-            block.append(tfLines[i + count])
-
-            if tfLines[i + count][0] == '}':
-                break     
-
-    tfLines = (open(args.path + '/' + tfFile, 'r')).readlines()
-
-    for i in range(0, len(tfLines)):
-        line = tfLines[i]
-
-        block = []
-
-        if match('^variable\s\".+\"\s{', line):
-            captureBlock()
-            struc['variables'].append(block)
-          
-        if match('^output\s\".+\"\s{', line):
-            captureBlock()
-            struc['outputs'].append(block)
-
-        if match('^terraform\s+{', line):
-            captureBlock()
-            struc['versions'].append(block)
-            
-def lookupFiles():
-    '''
-    Returns list of Terraform files in given script param "args.path".  
-    '''
-
-    tfFiles = []
-
-    for file in os.listdir(args.path):
-        if file.endswith(".tf"):
-            tfFiles.append(file)
-
-    return tfFiles
+import iterateTerraformFiles
 
 def main():
 
@@ -60,26 +14,24 @@ def main():
 
     struc = { 'variables' : [], 'outputs' : [], 'versions' : [] }
 
-    # Get all variables and outputs defined in Terraform conifguration. Save them to strc dict.
-    for file in lookupFiles():
-        getBlock(file, struc)
+    iterateTerraformFiles.captureTerraformObjects(args.path)
 
     # Build an array of maps that contain information about variables.
-    resultVars = []
-    for tfVars in struc['variables']:
-        resultVars.append(processVarAndOut.getVarsFromBlock(tfVars))
+    # resultVars = []
+    # for tfVars in struc['variables']:
+    #     resultVars.append(processVarAndOut.getVarsFromBlock(tfVars))
 
-    # Build an array of maps that contain information about outputs.
-    resultOuts = []
-    for tfOuts in struc['outputs']:
-        resultOuts.append(processVarAndOut.getVarsFromBlock(tfOuts))
+    # # Build an array of maps that contain information about outputs.
+    # resultOuts = []
+    # for tfOuts in struc['outputs']:
+    #     resultOuts.append(processVarAndOut.getVarsFromBlock(tfOuts))
     
-    resultVersions = []
-    for tfVersions in struc['versions']:
-        resultVersions.append(processVarAndOut.getVarsFromBlock(tfVersions))
+    # resultVersions = []
+    # for tfVersions in struc['versions']:
+    #     resultVersions.append(processVarAndOut.getVarsFromBlock(tfVersions))
 
-    with open(args.path + '/README.md', 'w') as file:
-        file.write(renderReadMe.render(args.name, resultVars, resultOuts, args.contribute))
+    # with open(args.path + '/README.md', 'w') as file:
+    #     file.write(renderReadMe.render(args.name, resultVars, resultOuts, args.contribute))
 
 
 if __name__ == "__main__":
