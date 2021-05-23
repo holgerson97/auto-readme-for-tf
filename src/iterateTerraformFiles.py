@@ -1,4 +1,4 @@
-from re import match
+from re import match, findall
 import os
 import pprint
 
@@ -50,25 +50,82 @@ def captureTerraformObjects(path):
                 break
         
         return block
-        
+
+    def createVariable(tfObject):
+        '''
+        Create a dict for every variable found in each Terraform file.
+        Returns each dict to add it to the global disctionary.
+        '''
+        varObject = {}
+
+        # Get variable name from tfObject
+        try:
+            tfName = findall('^variable\\s"(.+)\"\s{', tfObject)[0]
+            varObject.update({'name' : tfName})
+        except (ValueError,IndexError):
+           print('Variable name not found for:\n' + tfObject) + "\n Please make sure, that your configuration is valid."
+
+        # Get description from tfObject
+        try:
+            tfDescription = findall('description\s+\=\s+\"(.+)\"', tfObject)[0]
+            varObject.update({'description' : tfDescription})
+        except (ValueError,IndexError):
+            # Since descriptions are optional we can pass IndexErrors
+            pass
+
+        # Get type from tfObject
+        try:
+            tfType = findall('type\s+=\s+([\w\W]*\}\))|type\s+=\s+([\w()]+)', tfObject)[0]
+            if tfType[0] == '': 
+                varObject.update({'type' : tfType[1]})
+            elif tfType[1] == '':
+                varObject.update({'type' : tfType[0]})
+        except (ValueError,IndexError):
+            # Since types are optional we can pass IndexErrors
+            pass
+
+        # Get default from tfObject
+        try:
+            tfDefault = findall('default\s+=\s+([\w\W]*\}\))|default\s+=\s+([\w()]+)', tfObject)[0]
+            if tfDefault[0] == '': 
+                varObject.update({'type' : tfDefault[1]})
+            elif tfDefault[1] == '':
+                varObject.update({'type' : tfDefault[0]})
+        except (ValueError,IndexError):
+            # Since defaults are optional we can pass IndexErrors
+            pass
+
+        # Get sensitive from tfObject
+        try:
+            tfSensitive = findall('sensitive\s+\=\s+(.+)', tfObject)[0]
+            varObject.update({'sensitive' : tfSensitive})
+        except (ValueError,IndexError):
+            # Since sensitives are optional we can pass IndexErrors
+            pass
+
+        return varObject
+
     def getTerraformObjects(tfFile):
         '''
         Iterate through Terraform files and get all objects.
         '''
         tfLines = (open(path + '/' + tfFile, 'r')).readlines()
-        
+             
         for i in range(0, len(tfLines)):
 
             if match('^variable\s\".+\"\s{', tfLines[i]):
                 tfVar = captureCurlyBraces(tfLines, i)
-                print(tfVar)
+                struc['variables'].append(tfVar)
 
             elif match('^output\s\".+\"\s{', tfLines[i]):
                 pass
 
             elif match('^terraform\s+{', tfLines[i]):
                 pass
+      
+    struc = { 'variables' : [], 'outputs' : [], 'versions' : [] }
 
-    
     for i in lookupFiles():
         getTerraformObjects(i)
+
+    pprint.pprint(struc)
