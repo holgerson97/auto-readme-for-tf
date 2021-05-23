@@ -1,4 +1,4 @@
-from re import match, findall
+from re import match, findall, search
 import os
 import pprint
 
@@ -145,6 +145,50 @@ def captureTerraformObjects(path):
 
         return outObject
 
+    def createVersion(tfObject):
+        '''
+        Create a dict for every version statement found in each Terraform file.
+        Returns each dict to add it to the global dictionary.
+        '''
+
+        verObject = { 'TerraformVersion' : '', 'Modules' : [] }
+
+        # Get required Terraform version name from tfObject
+        try:
+            tfVersion = findall('required_version\s=\s\"(.*)\"', tfObject)[0]
+            verObject.update({'TerraformVersion' : tfVersion})
+        except (ValueError,IndexError):
+           # Since Terraform version statement is optional we can pass IndexErrors
+           pass
+
+        # Get provider names from tfObject
+        try:
+            tfProviderName = findall('\n\s{4}(\w+)', tfObject)
+            for i in range(0, len(tfProviderName)):
+                verObject['Modules'].append({'Name' : tfProviderName[i] })
+        except:
+            pass
+
+        # Get provider source from tfObject
+        try:
+            tfProviderSource = findall('\n\s{6}source\s+=\s+\"(.*)\"', tfObject)
+            for i in range(0, len(tfProviderSource)):
+                verObject['Modules'][i].update({ 'source' : tfProviderSource[i] })
+        except:
+            # Since Terraform source statement is optional we can pass IndexErrors
+            pass
+        
+        # Get provider version from tfObject
+        try:
+            tfProviderVersion = findall('\n\s{6}version\s+=\s+\"(.*)\"', tfObject)
+            for i in range(0, len(tfProviderVersion)):
+                verObject['Modules'][i].update({ 'version' : tfProviderVersion[i] })
+        except:
+            # Since Terraform version statement is optional we can pass IndexErrors
+            pass
+
+        return verObject
+
     def getTerraformObjects(tfFile):
         '''
         Iterate through Terraform files and get all objects.
@@ -162,7 +206,8 @@ def captureTerraformObjects(path):
                 struc['outputs'].append(createOutput(tfOut))
 
             elif match('^terraform\s+{', tfLines[i]):
-                pass
+                tfVersion = captureCurlyBraces(tfLines, i)
+                struc['versions'].append(createVersion(tfVersion))
       
     struc = { 'variables' : [], 'outputs' : [], 'versions' : [] }
 
