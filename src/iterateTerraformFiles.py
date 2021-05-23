@@ -54,7 +54,7 @@ def captureTerraformObjects(path):
     def createVariable(tfObject):
         '''
         Create a dict for every variable found in each Terraform file.
-        Returns each dict to add it to the global disctionary.
+        Returns each dict to add it to the global dictionary.
         '''
         varObject = {}
 
@@ -105,6 +105,46 @@ def captureTerraformObjects(path):
 
         return varObject
 
+    def createOutput(tfObject):
+        '''
+        Create a dict for every output found in each Terraform file.
+        Returns each dict to add it to the global dictionary.
+        '''
+        
+        outObject = {}
+
+        # Get output name from tfObject
+        try:
+            tfName = findall('^output\\s"(.+)\"\s{', tfObject)[0]
+            outObject.update({'name' : tfName})
+        except (ValueError,IndexError):
+           print('Output name not found for:\n' + tfObject) + '\n Please make sure, that your configuration is valid.'
+
+        # Get description from tfObject
+        try:
+            tfDescription = findall('description\s+\=\s+\"(.+)\"', tfObject)[0]
+            outObject.update({'description' : tfDescription})
+        except (ValueError,IndexError):
+            # Since descriptions are optional we can pass IndexErrors
+            pass
+
+        # Get value from tfObject
+        try:
+            tfValue = findall('\s+value\s+=\s+(.+)', tfObject)[0]
+            outObject.update({'Value' : tfValue})
+        except (ValueError,IndexError):
+            raise print('Value not specified for output object:\n' + tfObject + '\n Please make sure, that your configuration is valid.')
+
+        # Get sensitive from tfObject
+        try:
+            tfSensitive = findall('sensitive\s+\=\s+(.+)', tfObject)[0]
+            outObject.update({'sensitive' : tfSensitive})
+        except (ValueError,IndexError):
+            # Since sensitives are optional we can pass IndexErrors
+            pass
+
+        return outObject
+
     def getTerraformObjects(tfFile):
         '''
         Iterate through Terraform files and get all objects.
@@ -115,10 +155,11 @@ def captureTerraformObjects(path):
 
             if match('^variable\s\".+\"\s{', tfLines[i]):
                 tfVar = captureCurlyBraces(tfLines, i)
-                struc['variables'].append(tfVar)
+                struc['variables'].append(createVariable(tfVar))
 
             elif match('^output\s\".+\"\s{', tfLines[i]):
-                pass
+                tfOut = captureCurlyBraces(tfLines, i)
+                struc['outputs'].append(createOutput(tfOut))
 
             elif match('^terraform\s+{', tfLines[i]):
                 pass
