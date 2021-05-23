@@ -1,29 +1,43 @@
 variable "empty" {}
+variable "oneline1" { description = "Description" }
 
-variable "number" {
+variable "multiline1" {
 
-    description = "Just antoher number."
-
-    type = number
-    default = 100
-
-    sensetive = true
+  description = "Just antoher number."
 
 }
+variable "multiline2" {
 
-variable "string-test-default" {
+  description = "Just antoher number."
+  default     = "Value"
 
-    description = "Just another description."
-    
-    type = string
-    default = "string-test-value"
-
-    sensitive = false
-    
 }
+variable "multiline3" {
 
-variable "string-test-type" {
+  description = "Just antoher number."
+  default     = "Value"
+  type        = string
 
-    type = string
+}
+variable "multiline4" {
+
+  description = "Just antoher number."
+  default     = "Value"
+  type        = string
+  sensitive   = true
+
+}
+variable "object" {
+
+  description = "Just an object."
+  default = {
+    key   = number
+    vlaue = 1
+  }
+  type = object({
+    key   = string
+    Value = number
+  })
+  sensitive = true
 
 }
