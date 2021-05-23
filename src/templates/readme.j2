@@ -1,34 +1,52 @@
 # {{ name }}
-
+{% if tableOfContents == true %}
 # Table of Contents
+{% if requirements == true %}
 - [Requiremets](#requirements)
+{%- endif -%}
+{% if gettingStarted == true %}
 - [Getting Started](#getting-started)
     - [Basic usage](#basic-usage)
     - [Custom usage](#custom-usage)
+{%- endif -%}
+{% if varsstatement == true %}
 - [Variables](#variables)
+{%- endif -%}
+{% if outsstatement == true %}
 - [Outputs](#outputs)
+{%- endif -%}
+&nbsp;
 - [Contributing](#contributing)
+{%- endif -%}
 
+{% if requirements == true %}
+&nbsp;
 # Requirements
-| Software     |  Version  |
-| :--------    | :-------- |
-{%- macro buildRequirements(software, version) -%}
-| {{software}} | {{version}}|
+| Software     |  Version  | Source |
+| :--------    | :-------- | :----- |
+{%- macro buildRequirements(name, version, source) -%}
+| {{name}} | {{version}} | {{source}} |
 {%- endmacro -%}
-{% for items in requirements %}
-{{ buildRequirements(items.software, items.version) }}
+{% for items in versions %}
+{{ buildRequirements(items.name, items.version, items.source) }}
 {%- endfor %}
+{%- endif -%}
 
+{% if varsstatement == true %}
+&nbsp;
 # Variables
 | Variable | Type | Default | Description | Sensitive |
 | :------- | :--: | :------ | :---------- | :-------- |
 {%- macro buildVars(name, type, default, description, sensitive) -%}
-| `{{ name }}` | {{type}} | {{default}} | {{description}} | {{sensitive}} |
+| `{{name}}` | {{type}} | {{default}} | {{description}} | {{sensitive}} |
 {%- endmacro -%}
 {% for items in variables %}
 {{ buildVars(items.name, items.type, items.default, items.description, items.sensitive) }}
 {%- endfor %}
+{%- endif -%}
 
+{% if outsstatement == true %}
+&nbsp;
 # Outputs
 | Output | Description |
 | :----- | :---------- |
@@ -38,6 +56,7 @@
 {% for items in outputs %}
 {{ buildOuts(items.name, items.description) }}
 {%- endfor %}
+{%- endif -%}
 
 &nbsp;
 ## Contributing
