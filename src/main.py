@@ -12,8 +12,6 @@ def main():
 
     subprocess.call("./preflight.sh" + ' -p ' + args.path, shell=True)
 
-    struc = { 'variables' : [], 'outputs' : [], 'versions' : [] }
-
     iterateTerraformFiles.captureTerraformObjects(args.path)
 
     # Build an array of maps that contain information about variables.
