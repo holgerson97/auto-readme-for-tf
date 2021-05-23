@@ -1,6 +1,5 @@
 from re import match, findall, search
 import os
-import pprint
 
 def captureTerraformObjects(path):
 
@@ -165,7 +164,7 @@ def captureTerraformObjects(path):
         try:
             tfProviderName = findall('\n\s{4}(\w+)', tfObject)
             for i in range(0, len(tfProviderName)):
-                verObject['Modules'].append({'Name' : tfProviderName[i] })
+                verObject['Modules'].append({'name' : tfProviderName[i] })
         except:
             pass
 
