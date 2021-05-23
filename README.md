@@ -9,11 +9,11 @@ Tool to help you create templated READMEs that contain the actual information fr
 - Create better Makefile to make testing/development easier
 - Create Unit Tests
 - Create GitHub Action to run tests against Unit Tests
-- Add support for multi line variables
-- Add support for versions
+- ~~Add support for multi line variables~~
+- ~~Add support for versions~~
 - Provide sample code for module in README
 - Choose between different README templates
 - Collect information about resources deployed and add to list
 - Create GitHub Action to use this tool
 - Create Actual README for repository
-- REFACTOR
+- ~~REFACTOR~~
