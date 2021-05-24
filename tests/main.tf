@@ -7,7 +7,7 @@ variable "in_main_file" {
   default     = "Value"
   type        = string
 }
-output "multiline2" {
+output "multiline4" {
 
   value       = one(server.main[*].id)
   description = "Description"
