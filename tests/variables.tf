@@ -31,12 +31,12 @@ variable "object" {
 
   description = "Just an object."
   default = {
-    key   = number
-    vlaue = 1
+    key   = "integer"
+    value = 1
   }
   type = object({
     key   = string
-    Value = number
+    value = number
   })
   sensitive = true
 
