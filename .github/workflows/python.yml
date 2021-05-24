@@ -58,5 +58,4 @@ jobs:
       - name: Test with pytest
         run: |
           pip install pytest
-          pytest src/
-
+          cd src/ && pytest src/
