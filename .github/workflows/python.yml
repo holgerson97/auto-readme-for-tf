@@ -56,7 +56,7 @@ jobs:
           pip install -r src/requirements.txt
 
       - name: Test with pytest
-        continueOnErrror: true
+        continue-on-error: true
         run: |
           pip install pytest
           cd src/ && pytest
