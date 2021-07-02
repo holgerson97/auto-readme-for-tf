@@ -31,7 +31,6 @@
 # Variables
 | Variable | Type | Default | Description | Sensitive |
 | :------- | :--: | :------ | :---------- | :-------- |
-| `in_main_file` | string | Value | Just antoher number. |  |
 | `empty` |  |  |  |  |
 | `oneline1` |  |  | Description |  |
 | `multiline1` |  |  | Just antoher number. |  |
@@ -39,6 +38,7 @@
 | `multiline3` | string | Value | Just antoher number. |  |
 | `multiline4` | string | Value | Just antoher number. | true |
 | `object` | object({    key   = string    value = number  }) | {    key   = "integer"    value = 1  } | Just an object. | true |
+| `in_main_file` | string | Value | Just antoher number. |  |
 
 &nbsp;
 # Outputs
