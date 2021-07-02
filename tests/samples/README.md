@@ -1,5 +1,7 @@
 # default_name
 
+&nbsp;
+
 # Table of Contents
 
 - [Requiremets](#requirements)
@@ -9,12 +11,22 @@
 - [Variables](#variables)
 - [Outputs](#outputs)&nbsp;
 - [Contributing](#contributing)
+
 &nbsp;
 # Requirements
 | Software     |  Version  | Source |
 | :--------    | :-------- | :----- |
 | random | 3.1.0 | hashicorp/random |
 | template | 2.2.0 | hashicorp/template |
+
+&nbsp;
+# Resources
+| Resource |
+| :------- |
+| `random_resource1` |
+| `random_resource2` |
+| `random_resource3` |
+
 &nbsp;
 # Variables
 | Variable | Type | Default | Description | Sensitive |
@@ -27,14 +39,15 @@
 | `multiline3` | string | Value | Just antoher number. |  |
 | `multiline4` | string | Value | Just antoher number. | true |
 | `object` | object({    key   = string    value = number  }) | {    key   = "integer"    value = 1  } | Just an object. | true |
+
 &nbsp;
 # Outputs
 | Output | Description |
 | :----- | :---------- |
-| `multiline4` | Description |
 | `oneline1` |  |
 | `multiline1` |  |
 | `multiline2` | Description |
-| `multiline3` | Description |&nbsp;
+| `multiline3` | Description |
+| `multiline4` | Description |&nbsp;
 ## Contributing
 Feel free to create pull requests.
