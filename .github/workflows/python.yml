@@ -59,3 +59,8 @@ jobs:
         run: |
           pip install pytest
           cd src/ && pytest
+      
+      - name: Print Sample and test file
+        run: |
+          cat tests/README.md
+          cat tests/samples/README.md

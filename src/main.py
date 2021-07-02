@@ -19,6 +19,8 @@ def main():
                 args.requirements,
                 args.gettingstarted,
                 struc['versions'],
+                struc['resources'],
+                args.resources,
                 struc['variables'],
                 args.variables,
                 struc['outputs'],
@@ -49,6 +51,13 @@ if __name__ == "__main__":
         type=bool,
         default=True,
         help='Choose if you want to display a table of contents. \
+              Defaults to true.')
+
+    parser.add_argument(
+        '--resources',
+        type=bool,
+        default=True,
+        help='Choose if you want to display resources. \
               Defaults to true.')
 
     parser.add_argument(

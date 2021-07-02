@@ -1,4 +1,6 @@
 # {{ name }}
+
+&nbsp;
 {% if tableOfContents == true %}
 # Table of Contents
 {% if requirements == true %}
@@ -9,6 +11,9 @@
     - [Basic usage](#basic-usage)
     - [Custom usage](#custom-usage)
 {%- endif -%}
+{% if resourceStatement == true %}
+- [Resources](#resources)
+{%- endif -%}
 {% if varsstatement == true %}
 - [Variables](#variables)
 {%- endif -%}
@@ -18,8 +23,8 @@
 &nbsp;
 - [Contributing](#contributing)
 {%- endif -%}
-
 {% if requirements == true %}
+
 &nbsp;
 # Requirements
 | Software     |  Version  | Source |
@@ -31,8 +36,21 @@
 {{ buildRequirements(items.name, items.version, items.source) }}
 {%- endfor %}
 {%- endif -%}
+{% if resourcesStatement == true %}
 
+&nbsp;
+# Resources
+| Resource |
+| :------- |
+{%- macro buildResources(name) -%}
+| `{{name}}` |
+{%- endmacro -%}
+{% for items in resources %}
+{{ buildResources(items) }}
+{%- endfor %}
+{%- endif -%}
 {% if varsstatement == true %}
+
 &nbsp;
 # Variables
 | Variable | Type | Default | Description | Sensitive |
@@ -44,8 +62,8 @@
 {{ buildVars(items.name, items.type, items.default, items.description, items.sensitive) }}
 {%- endfor %}
 {%- endif -%}
-
 {% if outsstatement == true %}
+
 &nbsp;
 # Outputs
 | Output | Description |
@@ -57,7 +75,6 @@
 {{ buildOuts(items.name, items.description) }}
 {%- endfor %}
 {%- endif -%}
-
 &nbsp;
 ## Contributing
 {%- if contribute == True %}

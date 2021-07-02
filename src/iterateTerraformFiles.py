@@ -128,7 +128,7 @@ def captureTerraformObjects(path):
             outObject.update({'name': tfName})
         except (ValueError, IndexError):
             print('Output name not found for:\n' + tfObject +
-                '\n Please make sure, that your configuration is valid.')
+                  '\n Please make sure, that your configuration is valid.')
 
         # Get description from tfObject
         try:
@@ -145,7 +145,7 @@ def captureTerraformObjects(path):
             outObject.update({'Value': tfValue})
         except (ValueError, IndexError):
             print('Value not specified for output object:\n' + tfObject +
-                '\n Please make sure, that your configuration is valid.')
+                  '\n Please make sure, that your configuration is valid.')
 
         # Get sensitive from tfObject
         try:
@@ -207,6 +207,20 @@ def captureTerraformObjects(path):
 
         return verObject
 
+    def createResource(tfObject):
+        '''
+        Create a dict for every
+        '''
+
+        # Get Resource name from object
+        try:
+            tfResource = findall('^resource\\s\"(\\w*)\"', tfObject)[0]
+        except (ValueError, IndexError):
+            print('Resource definition not valid:\n' + tfObject +
+                  '\n Please make sure, that your configuration is valid.')
+
+        return tfResource
+
     def getTerraformObjects(tfFile):
         '''
         Iterate through Terraform files and get all objects.
@@ -227,7 +241,12 @@ def captureTerraformObjects(path):
                 tfVersion = captureCurlyBraces(tfLines, i)
                 struc['versions'].append(createVersion(tfVersion))
 
-    struc = {'variables': [], 'outputs': [], 'versions': []}
+            elif match('^resource\\s+', tfLines[i]):
+                tfResource = createResource(tfLines[i])
+                struc['resources'].append(
+                    tfResource) if tfResource not in struc['resources'] else struc['resources']
+
+    struc = {'resources': ([]), 'variables': [], 'outputs': [], 'versions': []}
 
     for i in lookupFiles():
         getTerraformObjects(i)
