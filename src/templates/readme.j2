@@ -1,5 +1,10 @@
-# {{ name }}
-
+{{ title }}
+{%- macro descriptionBlock(line) -%}
+{{ line }}
+{%- endmacro -%}
+{% for items in description %}
+{{ descriptionBlock(items) }}
+{%- endfor %}
 &nbsp;
 {% if tableOfContents == true %}
 # Table of Contents
@@ -9,7 +14,7 @@
 {% if gettingStarted == true %}
 - [Getting Started](#getting-started)
     - [Basic usage](#basic-usage)
-    - [Custom usage](#custom-usage)
+    - [Advanced usage](#advanced-usage)
 {%- endif -%}
 {% if resourceStatement == true %}
 - [Resources](#resources)
@@ -23,8 +28,8 @@
 &nbsp;
 - [Contributing](#contributing)
 {%- endif -%}
-{% if requirements == true %}
 
+{% if requirements == true %}
 &nbsp;
 # Requirements
 | Software     |  Version  | Source |
@@ -38,6 +43,24 @@
 {%- endif -%}
 {% if resourcesStatement == true %}
 
+{% if gettingStarted == true %}
+&nbsp;
+# Getting Started
+## Basic usage
+{%- macro basicUsage(line) -%}
+{{ line }}
+{%- endmacro -%}
+{% for items in gettingStartedBasic %}
+{{ basicUsage(items) }}
+{%- endfor %}
+## Advanced usage
+{%- macro advancedUsage(line) -%}
+{{ line }}
+{%- endmacro -%}
+{% for items in gettingStartedAdvanced %}
+{{ advancedUsage(items) }}
+{%- endfor %}
+{%- endif %}
 &nbsp;
 # Resources
 | Resource |

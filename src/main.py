@@ -3,7 +3,7 @@ import argparse
 import subprocess
 import renderReadMe
 import iterateTerraformFiles
-
+import getContentFromExistingREADME
 
 def main():
 
@@ -11,13 +11,21 @@ def main():
 
     struc = iterateTerraformFiles.captureTerraformObjects(args.path)
 
+    title = getContentFromExistingREADME.captureTitle(args.path)
+    description = getContentFromExistingREADME.captureDescription(args.path)
+    gettingStartedBasic = getContentFromExistingREADME.captureGettingStartedBasic(args.path)
+    gettingStartedAdvanced = getContentFromExistingREADME.captureGettingStartedAdvanced(args.path)
+
     with open(args.path + '/README.md', 'w') as file:
         file.write(
             renderReadMe.render(
-                args.name,
+                title,
+                description,
                 args.tableofcontents,
                 args.requirements,
                 args.gettingstarted,
+                gettingStartedBasic,
+                gettingStartedAdvanced,
                 struc['versions'],
                 struc['resources'],
                 args.resources,
@@ -38,13 +46,6 @@ if __name__ == "__main__":
         default='../tests',
         help='Specify path to your Terraform module directory. \
               Defaults to "../tests".')
-
-    parser.add_argument(
-        '--name',
-        type=str,
-        default='default_name',
-        help='Specify the name of your Terraform module. \
-              Defaults to "default_name".')
 
     parser.add_argument(
         '--tableofcontents',

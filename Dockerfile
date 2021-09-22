@@ -2,6 +2,8 @@ FROM ubuntu:20.04
 
 USER root
 
+WORKDIR /app
+
 # General updating
 RUN apt-get update -y && apt-get upgrade -y
 
@@ -29,3 +31,10 @@ RUN set -ex && cd ~ \
   && tar -xf Python-${PYTHON_VERSION}.tgz \
   && cd Python-${PYTHON_VERSION} \
   && ./configure ––enable–optimizations
+
+COPY requirements.txt .
+COPY src/ .
+
+RUN pip3 install -r requirements.txt
+
+ENTRYPOINT [ "" ]

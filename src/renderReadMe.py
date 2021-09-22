@@ -2,10 +2,13 @@ from jinja2 import Environment, FileSystemLoader
 
 
 def render(
-        moduleName,
+        title,
+        description,
         tableOfContents,
         requirements,
         gettingStarted,
+        gettingStartedBasic,
+        gettingStartedAdvanced,
         versions,
         res,
         resStatement,
@@ -18,10 +21,13 @@ def render(
     env = Environment(loader=FileSystemLoader('templates'))
     template = env.get_template('readme.j2')
     renderdReadMe = template.render(
-        name=moduleName,
+        title=title,
+        description=description,
         tableOfContents=tableOfContents,
         requirements=requirements,
         gettingStarted=gettingStarted,
+        gettingStartedBasic=gettingStartedBasic,
+        gettingStartedAdvanced=gettingStartedAdvanced,
         terraformVersion=versions[0],
         versions=versions[0]['Modules'],
         resources=res,
