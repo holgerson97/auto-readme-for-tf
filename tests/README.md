@@ -1,5 +1,5 @@
 # default_name
-
+123s
 &nbsp;
 
 # Table of Contents
@@ -7,11 +7,10 @@
 - [Requiremets](#requirements)
 - [Getting Started](#getting-started)
     - [Basic usage](#basic-usage)
-    - [Custom usage](#custom-usage)
+    - [Advanced usage](#advanced-usage)
 - [Variables](#variables)
 - [Outputs](#outputs)&nbsp;
 - [Contributing](#contributing)
-
 &nbsp;
 # Requirements
 | Software     |  Version  | Source |
@@ -19,6 +18,11 @@
 | random | 3.1.0 | hashicorp/random |
 | template | 2.2.0 | hashicorp/template |
 
+
+&nbsp;
+# Getting Started
+## Basic usage
+## Advanced usage
 &nbsp;
 # Resources
 | Resource |
