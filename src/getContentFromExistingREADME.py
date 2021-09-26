@@ -1,3 +1,21 @@
+def captureBadges(path):
+    '''
+    Inputs: Path to the Terraform Module
+    Returns: Badges form existing  README file.
+    '''
+
+    mdLines = (open(path + 'README.md', 'r')).readlines()
+    badges = []
+
+    for i in range(0, len(mdLines)):
+
+        if mdLines[i][0] == '#':
+            break
+        else:
+            badges.append(mdLines[i][:-1])
+
+    return badges
+
 def captureTitle(path):
     '''
     Inputs: Path to the Terraform Module

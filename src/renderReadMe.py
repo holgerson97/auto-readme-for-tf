@@ -2,6 +2,7 @@ from jinja2 import Environment, FileSystemLoader
 
 
 def render(
+        badges,
         title,
         description,
         tableOfContents,
@@ -21,6 +22,7 @@ def render(
     env = Environment(loader=FileSystemLoader('templates'))
     template = env.get_template('readme.j2')
     renderdReadMe = template.render(
+        badges=badges,
         title=title,
         description=description,
         tableOfContents=tableOfContents,

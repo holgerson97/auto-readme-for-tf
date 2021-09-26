@@ -15,10 +15,12 @@ def main():
     description = getContentFromExistingREADME.captureDescription(args.path)
     gettingStartedBasic = getContentFromExistingREADME.captureGettingStartedBasic(args.path)
     gettingStartedAdvanced = getContentFromExistingREADME.captureGettingStartedAdvanced(args.path)
+    badges = getContentFromExistingREADME.captureBadges(args.path)
 
     with open(args.path + '/README.md', 'w') as file:
         file.write(
             renderReadMe.render(
+                badges,
                 title,
                 description,
                 args.tableofcontents,
