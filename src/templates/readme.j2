@@ -4,8 +4,9 @@
 {%- endmacro -%}
 {% for items in description %}
 {{ descriptionBlock(items) }}
-{%- endfor%}
+{%- endfor %}
 &nbsp;
+
 {%- if tableOfContents == true %}
 # Table of Contents
 {%- if requirements == true %}
@@ -24,8 +25,7 @@
 {%- endif -%}
 {% if outsstatement == true %}
 - [Outputs](#outputs)
-{%- endif -%}
-&nbsp;
+{%- endif %}
 - [Contributing](#contributing)
 {%- endif -%}
 
