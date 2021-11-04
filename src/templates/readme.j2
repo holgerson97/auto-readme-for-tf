@@ -6,7 +6,6 @@
 {{ descriptionBlock(items) }}
 {%- endfor %}
 &nbsp;
-
 {%- if tableOfContents == true %}
 # Table of Contents
 {%- if requirements == true %}
@@ -27,10 +26,9 @@
 - [Outputs](#outputs)
 {%- endif %}
 - [Contributing](#contributing)
-{%- endif -%}
-
-{% if requirements == true %}
+{%- endif %}
 &nbsp;
+{%- if requirements == true %}
 # Requirements
 | Software     |  Version  | Source |
 | :--------    | :-------- | :----- |
@@ -39,12 +37,10 @@
 {%- endmacro -%}
 {% for items in versions %}
 {{ buildRequirements(items.name, items.version, items.source) }}
-{%- endfor %}
-{%- endif -%}
-{% if resourcesStatement == true %}
-
-{% if gettingStarted == true %}
+{%- endfor -%}
+{%- endif %}
 &nbsp;
+{%- if gettingStarted == true %}
 # Getting Started
 ## Basic usage
 {%- macro basicUsage(line) -%}
@@ -62,6 +58,7 @@
 {%- endfor %}
 {%- endif %}
 &nbsp;
+{%- if resourcesStatement == true %}
 # Resources
 | Resource |
 | :------- |
@@ -71,10 +68,9 @@
 {% for items in resources %}
 {{ buildResources(items) }}
 {%- endfor %}
-{%- endif -%}
-{% if varsstatement == true %}
-
+{%- endif %}
 &nbsp;
+{%- if varsstatement == true %}
 # Variables
 | Variable | Type | Default | Description | Sensitive |
 | :------- | :--: | :------ | :---------- | :-------- |
@@ -84,10 +80,9 @@
 {% for items in variables %}
 {{ buildVars(items.name, items.type, items.default, items.description, items.sensitive) }}
 {%- endfor %}
-{%- endif -%}
-{% if outsstatement == true %}
-
+{%- endif %}
 &nbsp;
+{%- if outsstatement == true %}
 # Outputs
 | Output | Description |
 | :----- | :---------- |
@@ -97,7 +92,7 @@
 {% for items in outputs %}
 {{ buildOuts(items.name, items.description) }}
 {%- endfor %}
-{%- endif -%}
+{%- endif %}
 &nbsp;
 ## Contributing
 {%- if contribute == True %}
