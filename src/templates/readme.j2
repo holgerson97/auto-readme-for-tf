@@ -4,9 +4,9 @@
 {%- endmacro -%}
 {% for items in description %}
 {{ descriptionBlock(items) }}
-{%- endfor %}
+{%- endfor-%}
 &nbsp;
-{% if tableOfContents == true %}
+{%- if tableOfContents == true %}
 # Table of Contents
 {%- if requirements == true %}
 - [Requiremets](#requirements)
